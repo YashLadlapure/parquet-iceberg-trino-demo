@@ -2,44 +2,47 @@
 -- Run all commands inside the Trino CLI
 -- Entry: docker exec -it trino trino
 
--- Step 1: Verify catalog is registered
+-- Always check this first — if 'iceberg' isn't listed, the catalog config isn't mounted correctly
+-- and everything below will fail
 SHOW CATALOGS;
 
--- Step 2: Check existing schemas under iceberg catalog
+-- See what schemas exist under iceberg
 SHOW SCHEMAS FROM iceberg;
 
--- Step 3: Drop schema if re-running from scratch
+-- Useful when re-running from scratch; CASCADE drops any tables in the schema too
 DROP SCHEMA IF EXISTS iceberg.titanic CASCADE;
 
--- Step 4: Create schema — location must match bucket + prefix in MinIO
--- Format: s3://<bucket-name>/<folder-path>
--- Bucket: warehouse | Folder: warehouse/titanic
+-- Location tells Iceberg (and Hive Metastore) where to write metadata for this schema
+-- Format: s3://<bucket>/<prefix>  —  first 'warehouse' is the bucket name, second is a folder inside it
 CREATE SCHEMA iceberg.titanic
 WITH (location = 's3://warehouse/warehouse/titanic');
 
--- Step 5: Create Iceberg table with Titanic column schema
+-- PassengerId is BIGINT even though this dataset is tiny — convention for ID columns is to give them room
+-- Survived/Pclass/SibSp/Parch are INTEGER — small whole numbers, 32-bit is fine
+-- Age/Fare are DOUBLE — decimal values need floating point
 CREATE TABLE iceberg.titanic.passengers (
-  PassengerId  BIGINT,    -- 64-bit ID, safe for scale
-  Survived     INTEGER,   -- 0 or 1 flag
-  Pclass       INTEGER,   -- passenger class (1, 2, 3)
+  PassengerId  BIGINT,
+  Survived     INTEGER,
+  Pclass       INTEGER,
   Name         VARCHAR,
   Sex          VARCHAR,
-  Age          DOUBLE,    -- decimal age
-  SibSp        INTEGER,   -- siblings/spouses aboard
-  Parch        INTEGER,   -- parents/children aboard
+  Age          DOUBLE,
+  SibSp        INTEGER,
+  Parch        INTEGER,
   Ticket       VARCHAR,
-  Fare         DOUBLE,    -- ticket price
+  Fare         DOUBLE,
   Cabin        VARCHAR,
-  Embarked     VARCHAR    -- port of embarkation
+  Embarked     VARCHAR
 );
 
--- Step 6: Insert one row to validate the write path
--- Iceberg will write this as a managed Parquet file + update snapshot metadata
+-- Iceberg doesn't auto-register a pre-existing Parquet file in the bucket
+-- This INSERT validates the write path: Trino writes an Iceberg-managed Parquet file
+-- and updates the snapshot metadata — confirming the full pipeline works
 INSERT INTO iceberg.titanic.passengers VALUES
 (1, 0, 3, 'Braund, Mr. Owen Harris', 'male', 22, 1, 0, 'A/5 21171', 7.25, NULL, 'S');
 
--- Step 7: Confirm read path works
+-- Should return the row inserted above
 SELECT * FROM iceberg.titanic.passengers;
 
--- Step 8: Count rows — should return 1
+-- Should return 1
 SELECT COUNT(*) FROM iceberg.titanic.passengers;
