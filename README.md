@@ -1,6 +1,6 @@
 # Parquet → MinIO → Apache Iceberg → Trino
 
-> **Internship Task 1 @ Augmented Transformations, Pune**  
+  
 > End-to-end data lakehouse PoC: store a Parquet file in MinIO, register it as an Apache Iceberg table via Hive Metastore, and query it through Trino.
 
 ---
