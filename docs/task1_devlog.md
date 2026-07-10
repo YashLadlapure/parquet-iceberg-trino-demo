@@ -124,7 +124,7 @@ INSERT INTO iceberg.titanic.passengers VALUES
 
 Trino wrote that as a new Iceberg-managed Parquet file under the schema location and updated the snapshot. `SELECT *` then returned the row. `SELECT COUNT(*)` returned `1`. The pipeline works — the pre-existing Parquet file just isn't connected to the table yet.
 
-Longer term, loading the original `titanic.parquet` properly means using PyIceberg's `add_files` to register it into the table's manifest without rewriting it. That's a Task 2-level thing.
+Longer term, loading the original `titanic.parquet` properly means using PyIceberg's `add_files` to register it into the table's manifest without rewriting it.
 
 ---
 
@@ -154,9 +154,3 @@ Once all the above was sorted:
 - `SELECT COUNT(*)` → `1`
 
 Full read-write path confirmed.
-
----
-
-## What's Next (Task 2)
-
-Generate a larger relational synthetic dataset using Python + Faker + PostgreSQL with proper FK constraints, export as Parquet files, upload to the same MinIO bucket, register them as Iceberg tables, and run multi-table analytical SQL through Trino.

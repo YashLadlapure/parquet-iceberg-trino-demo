@@ -139,15 +139,6 @@ See [`docs/task1_devlog.md`](docs/task1_devlog.md) for root causes and fixes. Su
 
 ---
 
-## Task 2 — Next Steps
-
-- Generate relational synthetic dataset with Python + Faker + PostgreSQL (with FK constraints)
-- Export tables as Parquet files, upload to MinIO `warehouse` bucket
-- Register as Iceberg tables
-- Run multi-table analytical SQL through Trino
-
----
-
 ## Author
 
 **Yash Ladlapure**  
