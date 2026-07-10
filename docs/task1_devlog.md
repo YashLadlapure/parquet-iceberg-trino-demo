@@ -1,7 +1,6 @@
 # Task 1 — Developer Log
 
-**Intern:** Yash Ladlapure  
-**Company:** Augmented Transformations, Pune  
+**Author:** Yash Ladlapure  
 **Date:** July 2026
 
 ---

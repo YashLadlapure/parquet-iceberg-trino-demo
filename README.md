@@ -1,6 +1,5 @@
 # Parquet → MinIO → Apache Iceberg → Trino
 
-> **Internship Task 1 @ Augmented Transformations, Pune**  
 > Store a Parquet file in MinIO, register it as an Apache Iceberg table via Hive Metastore, and query it through Trino — all running locally in Docker.
 
 ---
@@ -152,5 +151,5 @@ See [`docs/task1_devlog.md`](docs/task1_devlog.md) for root causes and fixes. Su
 ## Author
 
 **Yash Ladlapure**  
-B.Tech CSE @ MIT-WPU (2023–2027) | Software Engineer Intern @ Augmented Transformations  
+B.Tech CSE @ MIT-WPU (2023–2027)  
 [GitHub](https://github.com/YashLadlapure) · [Portfolio](https://yashladlapure.github.io/portfolio-website/)
